@@ -1,0 +1,141 @@
+{% extends "myapp/home.html" %}
+{% load static %}
+
+{% block title %}Dashboard | CARBIB{% endblock %}
+
+{% block content %}
+<section class="content">
+  <div class="container-fluid">
+    {% include "myapp/includes/page_titles.html" with page_title="View Clients" %}
+
+    <div class="card-body">
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+
+      <div class="d-flex justify-content-between mb-3">
+        <form method="post" action="{% url 'update_candidates' %}" enctype="multipart/form-data" class="w-100">
+          {% csrf_token %}
+          <div class="table-responsive">
+            <table class="table table-bordered table-striped table-hover">
+              <thead class="table-dark">
+                <tr>
+                  <th>#</th>
+                  <th style="min-width:180px;">Name</th>
+                  <th style="min-width:100px;">Gender</th>
+                  <th style="min-width:140px;">Contact</th>
+                  <th style="min-width:140px;">DOB</th>
+                  <th style="min-width:140px;">Passport Number</th>
+                  <th style="min-width:160px;">Job Applied</th>
+                  <th style="min-width:160px;">Location</th>
+                  <th style="min-width:160px;">Agent</th>
+                  <th style="min-width:160px;">Profile Picture</th>
+                  <th style="min-width:160px;">Full Photo</th>
+                  <th style="min-width:160px;">Passport Copy</th>
+                  <th style="min-width:160px;">Medical Copy</th>
+                  <th style="min-width:160px;">Interpol Copy</th>
+                  <th style="min-width:140px;">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for candidate in candidates %}
+                <tr>
+                  <td>{{ forloop.counter }}</td>
+
+                  <!-- Text fields -->
+                  <td><input type="text" name="full_name_{{ candidate.id }}" value="{{ candidate.full_name }}" class="form-control form-control-sm" style="width:180px;"></td>
+                  <td>
+                    <select name="gender_{{ candidate.id }}" class="form-select form-select-sm" style="width:100px;">
+                      <option value="Male" {% if candidate.gender == "Male" %}selected{% endif %}>Male</option>
+                      <option value="Female" {% if candidate.gender == "Female" %}selected{% endif %}>Female</option>
+                    </select>
+                  </td>
+                  <td><input type="text" name="phone_number_{{ candidate.id }}" value="{{ candidate.phone_number }}" class="form-control form-control-sm" style="width:140px;"></td>
+                  <td><input type="date" name="date_of_birth_{{ candidate.id }}" value="{{ candidate.date_of_birth }}" class="form-control form-control-sm" style="width:140px;"></td>
+                  <td><input type="text" name="passport_number_{{ candidate.id }}" value="{{ candidate.passport_number }}" class="form-control form-control-sm" style="width:140px;"></td>
+
+                  <!-- Dropdowns -->
+                  <td>
+                    <select name="job_applied_{{ candidate.id }}" class="form-select form-select-sm" style="width:160px;">
+                      {% for job in jobs %}
+                        <option value="{{ job.id }}" {% if candidate.job_applied.id == job.id %}selected{% endif %}>{{ job.title }}</option>
+                      {% endfor %}
+                    </select>
+                  </td>
+
+                  <td>
+                    <select name="job_location_{{ candidate.id }}" class="form-select form-select-sm" style="width:160px;">
+                      {% for country in countries %}
+                        <option value="{{ country.id }}" {% if candidate.job_location.id == country.id %}selected{% endif %}>{{ country.name }}</option>
+                      {% endfor %}
+                    </select>
+                  </td>
+
+                  <td>
+                    <select name="agent_{{ candidate.id }}" class="form-select form-select-sm" style="width:160px;">
+                      {% for agent in agents %}
+                        <option value="{{ agent.id }}" {% if candidate.referral_info.id == agent.id %}selected{% endif %}>{{ agent.full_name }}</option>
+                      {% endfor %}
+                    </select>
+                  </td>
+
+                  <!-- Image previews -->
+                  <td style="width:160px; text-align:center;">
+                    {% if candidate.profile_picture %}
+                        <img src="{{ candidate.profile_picture.url }}" class="img-thumbnail" style="width:140px; height:140px; object-fit:cover;">
+                    {% endif %}
+                    <input type="file" name="profile_picture_{{ candidate.id }}" class="form-control form-control-sm mt-1">
+                  </td>
+
+                  <td style="width:160px; text-align:center;">
+                    {% if candidate.full_photo %}
+                        <img src="{{ candidate.full_photo.url }}" class="img-thumbnail" style="width:140px; height:140px; object-fit:cover;">
+                    {% endif %}
+                    <input type="file" name="full_photo_{{ candidate.id }}" class="form-control form-control-sm mt-1">
+                  </td>
+
+                  <td style="width:160px; text-align:center;">
+                    {% if candidate.passport_copy %}
+                        <img src="{{ candidate.passport_copy.url }}" class="img-thumbnail" style="width:140px; height:140px; object-fit:cover;">
+                    {% endif %}
+                    <input type="file" name="passport_copy_{{ candidate.id }}" class="form-control form-control-sm mt-1">
+                  </td>
+
+                  <td style="width:160px; text-align:center;">
+                    {% if candidate.medical_copy %}
+                        <img src="{{ candidate.medical_copy.url }}" class="img-thumbnail" style="width:140px; height:140px; object-fit:cover;">
+                    {% endif %}
+                    <input type="file" name="medical_copy_{{ candidate.id }}" class="form-control form-control-sm mt-1">
+                  </td>
+
+                  <td style="width:160px; text-align:center;">
+                    {% if candidate.interpol %}
+                        <img src="{{ candidate.interpol.url }}" class="img-thumbnail" style="width:140px; height:140px; object-fit:cover;">
+                    {% endif %}
+                    <input type="file" name="interpol_{{ candidate.id }}" class="form-control form-control-sm mt-1">
+                  </td>
+
+                  <!-- Actions -->
+                  <td>
+                    <a href="{% url 'view_candidate' candidate.id %}" class="btn btn-sm btn-primary mb-1">
+                      <i class="fas fa-eye"></i> View CV
+                    </a>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+
+          <button type="submit" class="btn btn-success mt-2"><i class="fas fa-save"></i> Save Changes</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

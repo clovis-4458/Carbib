@@ -1,0 +1,50 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="CARBIB Company - Trusted recruitment and job placement agency in Uganda and abroad.">
+  <meta name="keywords" content="CARBIB, Job Portal, Uganda Jobs, Overseas Jobs, Recruitment Agency, Job Applications">
+  <meta name="author" content="CARBIB Company Ltd">
+  <meta name="robots" content="index, follow">
+  <meta property="og:title" content="CARBIB - Trusted Job Placement and Recruitment Services">
+  <meta property="og:description" content="Join thousands who trust CARBIB for reliable overseas and local job opportunities.">
+  <meta property="og:url" content="https://carbib-company.com">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://carbib-company.com/static/images/og-image.png"> <!-- optional preview image -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="CARBIB - Job Opportunities in Uganda & Abroad">
+  <meta name="twitter:description" content="Apply now for verified, trusted job openings with CARBIB.">
+  <meta name="twitter:image" content="https://carbib-company.com/static/images/og-image.png">
+  <!-- Favicon / App Icon -->
+<link rel="shortcut icon" type="image/png" href="{% static 'img/carbib_logo.png' %}">
+<link rel="icon" type="image/png" href="{% static 'img/carbib_logo.png' %}">
+<link rel="apple-touch-icon" sizes="180x180" href="{% static 'img/carbib_logo.png' %}">
+<link rel="icon" type="image/png" sizes="32x32" href="{% static 'img/carbib_logo.png' %}">
+<link rel="icon" type="image/png" sizes="16x16" href="{% static 'img/carbib_logo.png' %}">
+  <title>{% block title %}CARBIB{% endblock %}</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  
+  <link rel="stylesheet" href="{% static 'plugins/fontawesome-free/css/all.min.css' %}">
+
+  
+  <link rel="stylesheet" href="{% static 'plugins/icheck-bootstrap/icheck-bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/adminlte.min2167.css' %}">
+
+  {% block extra_css %}{% endblock %}
+</head>
+
+<body class="{% block body_class %}hold-transition register-page{% endblock %}">
+
+  {% block content %}
+  
+  {% endblock %}
+
+  <script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
+  <script src="{% static 'plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'js/adminlte.min2167.js' %}"></script>
+
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

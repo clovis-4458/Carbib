@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{{ candidate.full_name|title }} - CV</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.5; color: #333; }
+        h1, h2 { color: #2c3e50; margin-bottom: 5px; }
+        h1 { font-size: 1.5rem; }
+        h2 { font-size: 1.1rem; margin-top: 15px; }
+        .section { margin-bottom: 20px; }
+        .section-title { font-weight: bold; font-size: 1.2rem; color: #2980b9; margin-bottom: 5px; }
+        .info-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        .info-table th, .info-table td { padding: 5px; text-align: left; border-bottom: 1px solid #ddd; }
+        .images { display: flex; gap: 15px; margin-top: 10px; }
+        .images img { max-width: 150px; max-height: 150px; border: 1px solid #ccc; padding: 2px; }
+        .profile-pic { float: right; width: 120px; height: 120px; object-fit: cover; border-radius: 50%; border: 1px solid #ccc; }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <h1>{{ candidate.full_name|title }}</h1>
+    {% if candidate.profile_picture %}
+        <img src="{{ candidate.profile_picture.url }}" alt="Profile Picture" class="profile-pic">
+    {% endif %}
+
+    <!-- Personal Information -->
+    <div class="section">
+        <div class="section-title">Personal Information</div>
+        <table class="info-table">
+            <tr>
+                <th>Passport Number:</th>
+                <td>{{ candidate.passport_number }}</td>
+            </tr>
+            <tr>
+                <th>Date of Birth:</th>
+                <td>{{ candidate.date_of_birth }}</td>
+            </tr>
+            <tr>
+                <th>Gender:</th>
+                <td>{{ candidate.gender|title }}</td>
+            </tr>
+            <tr>
+                <th>Phone:</th>
+                <td>{{ candidate.phone_number }}</td>
+            </tr>
+            <tr>
+                <th>Email:</th>
+                <td>{{ candidate.email }}</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- Job Applied For -->
+    <div class="section">
+        <div class="section-title">Job Applied For</div>
+        <p>{{ candidate.job_applied.title|title }} - {{ candidate.job_location }}</p>
+    </div>
+
+    <!-- Documents -->
+    <div class="section">
+        <div class="section-title">Documents</div>
+        <div class="images">
+            {% if candidate.full_photo %}
+                <div>
+                    <strong>Full Photo</strong><br>
+                    <img src="{{ candidate.full_photo.url }}" alt="Full Photo">
+                </div>
+            {% endif %}
+            {% if candidate.passport_copy %}
+                <div>
+                    <strong>Passport Copy</strong><br>
+                    <img src="{{ candidate.passport_copy.url }}" alt="Passport Copy">
+                </div>
+            {% endif %}
+            {% if candidate.medical_copy %}
+                <div>
+                    <strong>Medical Copy</strong><br>
+                    <img src="{{ candidate.medical_copy.url }}" alt="Medical Copy">
+                </div>
+            {% endif %}
+            {% if candidate.interpol %}
+                <div>
+                    <strong>Interpol Copy</strong><br>
+                    <img src="{{ candidate.interpol.url }}" alt="Interpol Copy">
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+</body>
+</html>

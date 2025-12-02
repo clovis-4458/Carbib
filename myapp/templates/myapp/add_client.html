@@ -1,0 +1,175 @@
+{% extends "myapp/home.html" %}
+{% load static %}
+
+{% block title %}Dashboard | CARBIB{% endblock %}
+
+{% block content %}
+
+<section class="content">
+  <div class="container-fluid">
+    
+    {% include "myapp/includes/page_titles.html" with page_title="Add Clients" %}
+      
+    <div class="container my-5">
+        <h2 class="mb-4 text-center fw-bold" style="color: red; font-family: 'Cambria', serif;">
+            CANDIDATE APPLICATION FORM
+        </h2>
+              
+        <p class="text-center" style="color: darkblue; font-size: 1.2rem; font-family: 'Cambria', serif;">
+            Please fill in the form below to apply for a position.
+        </p>
+    </div>
+
+    {% if messages %}
+    <div class="mt-3">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <form method="post" action="" enctype="multipart/form-data" class="bg-white p-4 shadow-sm rounded">
+        {% csrf_token %}
+
+        <!-- Personal Details -->
+        <div class="border p-3 mb-4 rounded">
+            <h4 class="mb-3 text-primary">Personal Information</h4>
+            <div class="row">
+                {% for field in form.visible_fields %}
+                    {% if field.name in "full_name gender date_of_birth phone_number email religion profile_picture marital_status no_of_children tribe clan nin_number passport_number working_experience country_worked passport_copy full_photo medical_copy interpol cv" %}
+                    <div class="col-md-6 mb-3">
+                        {{ field.label_tag }}
+                        {{ field }}
+                        {% for error in field.errors %}
+                            <div class="text-danger small">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Address Details -->
+        <div class="border p-3 mb-4 rounded">
+            <h4 class="mb-3 text-primary">Address Details</h4>
+            <div class="row">
+                {% for field in form.visible_fields %}
+                    {% if field.name in "place_of_birth place_of_origin_village place_of_origin_parish place_of_origin_subcounty place_of_origin_county place_of_origin_district present_address_village present_address_parish present_address_subcounty present_address_county present_address_district" %}
+                    <div class="col-md-6 mb-3">
+                        {{ field.label_tag }}
+                        {{ field }}
+                        {% for error in field.errors %}
+                            <div class="text-danger small">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Parental Information -->
+        <div class="border p-3 mb-4 rounded">
+            <h4 class="mb-3 text-primary">Parental Information</h4>
+
+            <h5 class="text-secondary">Father</h5>
+            <div class="row">
+                {% for field in form.visible_fields %}
+                    {% if field.name in "father_name father_dob father_tel father_nin father_district father_tribe father_status" %}
+                    <div class="col-md-6 mb-3">
+                        {{ field.label_tag }}
+                        {{ field }}
+                        {% for error in field.errors %}
+                            <div class="text-danger small">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            <h5 class="mt-4 text-secondary">Mother</h5>
+            <div class="row">
+                {% for field in form.visible_fields %}
+                    {% if field.name in "mother_name mother_dob mother_tel mother_nin mother_district mother_tribe mother_status" %}
+                    <div class="col-md-6 mb-3">
+                        {{ field.label_tag }}
+                        {{ field }}
+                        {% for error in field.errors %}
+                            <div class="text-danger small">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Next of Kin -->
+        <div class="border p-3 mb-4 rounded">
+            <h5 class="mb-3 text-primary">Next of Kin</h5>
+            <div class="row">
+                {% for field in form.visible_fields %}
+                    {% if field.name in "next_of_kin_name next_of_kin_relationship next_of_kin_contact next_of_kin_address" %}
+                    <div class="col-md-6 mb-3">
+                        {{ field.label_tag }}
+                        {{ field }}
+                        {% for error in field.errors %}
+                            <div class="text-danger small">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Education Background -->
+        <div class="border p-3 mb-4 rounded">
+            <h5 class="mb-3 text-primary">Education Background</h5>
+            <div class="row">
+                <div class="col-md-12 mb-3">
+                    {{ form.education_level.label_tag }}
+                    {{ form.education_level }}
+                    {% for error in form.education_level.errors %}
+                        <div class="text-danger small">{{ error }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Job Application Details -->
+        <div class="border p-3 mb-4 rounded">
+            <h5 class="mb-3 text-primary">Job Application Details</h5>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    {{ form.job_applied.label_tag }}
+                    {{ form.job_applied }}
+                    {% for error in form.job_applied.errors %}
+                        <div class="text-danger small">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                <div class="col-md-6 mb-3">
+                    {{ form.job_location.label_tag }}
+                    {{ form.job_location }}
+                    {% for error in form.job_location.errors %}
+                        <div class="text-danger small">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                <div class="col-md-12 mb-3">
+                    {{ form.referral_info.label_tag }}
+                    {{ form.referral_info }}
+                    {% for error in form.referral_info.errors %}
+                        <div class="text-danger small">{{ error }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="text-end mt-4">
+            <button type="submit" class="btn btn-primary">Submit Application</button>
+        </div>
+    </form>
+  </div>
+</section>
+{% endblock %}

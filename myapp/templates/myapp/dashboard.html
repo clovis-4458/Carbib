@@ -1,0 +1,112 @@
+{% extends "myapp/home.html" %}
+{% load static %}
+
+{% block title %}Dashboard | CARBIB{% endblock %}
+
+{% block content %}
+<section class="content">
+  <div class="container-fluid">
+
+    <!-- Page Title with Logout Button -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      {% include "myapp/includes/page_titles.html" with page_title="Dashboard" %}
+      
+      <!-- Secure Logout Form -->
+      <form method="POST" action="{% url 'logout' %}" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger btn-sm">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+      </form>
+    </div>
+
+    <!-- Dashboard Info Boxes -->
+    <div class="row">
+
+      <!-- Total Candidates -->
+      <div class="col-12 col-sm-6 col-md-4">
+        <div class="info-box">
+          <span class="info-box-icon bg-info elevation-1">
+            <i class="fas fa-users"></i>
+          </span>
+          <div class="info-box-content">
+            <span class="info-box-text">Total Candidates</span>
+            <span class="info-box-number counter" data-target="{{ total_candidates|default:0 }}">0</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pending Candidates -->
+      <div class="col-12 col-sm-6 col-md-4">
+        <div class="info-box mb-3">
+          <span class="info-box-icon bg-warning elevation-1">
+            <i class="fas fa-user-clock"></i>
+          </span>
+          <div class="info-box-content">
+            <span class="info-box-text">Pending Candidates</span>
+            <span class="info-box-number counter" data-target="{{ pending_candidates|default:0 }}">0</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Travelled Candidates -->
+      <div class="col-12 col-sm-6 col-md-4">
+        <div class="info-box mb-3">
+          <span class="info-box-icon bg-success elevation-1">
+            <i class="fas fa-plane-departure"></i>
+          </span>
+          <div class="info-box-content">
+            <span class="info-box-text">Travelled Candidates</span>
+            <span class="info-box-number counter" data-target="{{ travelled_candidates|default:0 }}">0</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Import Excel Section -->
+    <div class="card mt-4">
+      <div class="card-header bg-primary text-white">
+        <h5 class="mb-0"><i class="fas fa-file-excel"></i> Import Candidates from Excel</h5>
+      </div>
+      <div class="card-body">
+        <form method="POST" action="{% url 'import_excel' %}" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="excel_file">Select Excel File:</label>
+            <input type="file" name="excel_file" id="excel_file" class="form-control" required>
+          </div>
+          <button type="submit" class="btn btn-success mt-2">
+            <i class="fas fa-upload"></i> Import Excel
+          </button>
+        </form>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Auto Counter Script -->
+<script>
+  const counters = document.querySelectorAll('.counter');
+
+  counters.forEach(counter => {
+    const updateCount = () => {
+      const target = +counter.getAttribute('data-target');
+      const current = +counter.innerText;
+      const speed = 40;
+      const increment = Math.ceil(target / 100);
+
+      if (current < target) {
+        counter.innerText = current + increment;
+        setTimeout(updateCount, speed);
+      } else {
+        counter.innerText = target;
+      }
+    };
+
+    updateCount();
+  });
+</script>
+
+{% endblock %}

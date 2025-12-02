@@ -1,0 +1,89 @@
+{% extends "myapp/base.html" %}
+{% load static %}
+{% block title %}Register | CARBIB{% endblock %}
+{% block content %}
+
+<div class="register-box" style="width: 600px;">
+  <div class="card card-outline card-primary">
+    <div class="card-header text-center">
+      <img src="{% static 'img/carbib_logo.png' %}" alt="CARBIB Logo" width="150">
+    </div>
+
+    <div class="card-body">
+      <p class="login-box-msg">Register to create your account</p>
+
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        {% endfor %}
+      {% endif %}
+      <form method="POST" action="{% url 'register' %}">
+  {% csrf_token %}
+
+  <div class="form-group row">
+    <div class="col-md-12">
+      {{ form.username.label_tag }}
+      {{ form.username }}
+      {{ form.username.errors }}
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <div class="col-md-6">
+      {{ form.first_name.label_tag }}
+      {{ form.first_name }}
+      {{ form.first_name.errors }}
+    </div>
+
+    <div class="col-md-6">
+      {{ form.last_name.label_tag }}
+      {{ form.last_name }}
+      {{ form.last_name.errors }}
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <div class="col-md-12">
+      {{ form.email.label_tag }}
+      {{ form.email }}
+      {{ form.email.errors }}
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <div class="col-md-6">
+      {{ form.password.label_tag }}
+      {{ form.password }}
+      {{ form.password.errors }}
+    </div>
+ 
+    <div class="col-md-6">
+      {{ form.confirm_password.label_tag }}
+      {{ form.confirm_password }}
+      {{ form.confirm_password.errors }}
+    </div>
+
+
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <button type="submit" class="btn btn-primary btn-block">Register</button>
+    </div>
+  </div>
+
+  <div class="text-center mt-3">
+    <p>Already have an account? <a href="{% url 'login' %}">Login here</a></p>
+  </div>
+</form>
+      <div class="text-center">
+        <p>By registering, you agree to our <a href="#">Terms of Service</a>.</p>      
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% include 'myapp/includes/head.html' %}
+</head>
+<body class="hold-transition light-mode  layout-navbar-fixed layout-footer-fixed">
+  <div class="wrapper">
+
+    {% include 'myapp/includes/navbar.html' %}
+
+    {% include 'myapp/includes/sidebar.html' %}
+
+    <div class="content-wrapper">
+      {% block content %}
+  
+      {% endblock %}
+    </div>
+    <footer class="main-footer">
+      <strong>&copy; 2025 <a href="#">CARBIB COMPANY</a>.</strong>
+      All rights reserved.
+      <div class="float-right d-none d-sm-inline-block">
+        <b>Version</b> 3.2.0
+      </div>
+    </footer>
+
+  </div>
+
+  {% include 'myapp/includes/footer.html' %}
+</body>
+</html>
