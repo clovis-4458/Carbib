@@ -15,20 +15,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY', default='django-insecure-please-change-this')
 DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '.onrender.com', 'carbib.onrender.com']
-CSRF_TRUSTED_ORIGINS = [
-    'https://carbib.onrender.com/',
-    'https://carbib.onrender.com/'
-]
-
-# 🔹 Static Files Storage with WhiteNoise
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / 'static']  # if you have a static folder
-STATIC_ROOT = BASE_DIR / 'staticfiles'
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
+# 🔹 Hosts and CSRF
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='127.0.0.1,localhost,carbib.onrender.com').split(',')
+CSRF_TRUSTED_ORIGINS = ['https://carbib.onrender.com']
 
 # 🔹 Authentication Redirects
 LOGOUT_REDIRECT_URL = '/login/'
@@ -105,12 +94,15 @@ TIME_ZONE = 'Africa/Kampala'
 USE_I18N = True
 USE_TZ = True
 
-# 🔹 Static files
+# 🔹 Static and Media Files
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-# Enable WhiteNoise static files compression
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+# Whitenoise for static files compression
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # 🔹 Default primary key field
