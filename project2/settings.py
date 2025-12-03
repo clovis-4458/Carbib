@@ -16,12 +16,8 @@ SECRET_KEY = config('SECRET_KEY', default='django-insecure-please-change-this')
 DEBUG = config('DEBUG', default=False, cast=bool)
 
 # 🔹 Hosts and CSRF
-ALLOWED_HOSTS = config(
-    'ALLOWED_HOSTS',
-    default='127.0.0.1,localhost,carbib.onrender.com'
-).split(',')
-
-CSRF_TRUSTED_ORIGINS = [f'https://{host}' for host in ALLOWED_HOSTS if host != '127.0.0.1' and host != 'localhost']
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='127.0.0.1,localhost,carbib.onrender.com').split(',')
+CSRF_TRUSTED_ORIGINS = [f'https://{host}' for host in ALLOWED_HOSTS if host not in ['127.0.0.1', 'localhost']]
 
 # 🔹 Authentication Redirects
 LOGOUT_REDIRECT_URL = '/login/'
@@ -44,10 +40,7 @@ INSTALLED_APPS = [
 # 🔹 Middleware
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-
-    # Whitenoise for production static files
-    'whitenoise.middleware.WhiteNoiseMiddleware',
-
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # Serve static files in production
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -63,7 +56,7 @@ ROOT_URLCONF = 'project2.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],  # Custom templates folder
+        'DIRS': [BASE_DIR / 'templates'],  # Global templates folder
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -103,14 +96,8 @@ USE_TZ = True
 
 # 🔹 Static and Media Files
 STATIC_URL = '/static/'
-
-# For local development
-STATICFILES_DIRS = [
-    BASE_DIR / 'static',
-]
-
-# For production
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_DIRS = [BASE_DIR / 'static']  # Local development
+STATIC_ROOT = BASE_DIR / 'staticfiles'    # Production
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
@@ -122,4 +109,8 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # 🔹 Render-friendly environment variables
-# Example: SECRET_KEY, DEBUG, ALLOWED_HOSTS
+# Use a .env file or Render Environment Variables
+# Example .env:
+# SECRET_KEY=<your secret>
+# DEBUG=False
+# ALLOWED_HOSTS=carbib.onrender.com
