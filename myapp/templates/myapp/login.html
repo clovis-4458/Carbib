@@ -3,45 +3,70 @@
 {% block title %}Login | CARBIB{% endblock %}
 
 {% block content %}
-
-<div class="register-box" style="width: 600px;">
-  <div class="card card-outline card-primary">
-    
-    <div class="card-header text-center">
-      <img src="{% static 'img/carbib_logo.png' %}" alt="CARBIB Logo" width="150">
-    </div>
-
-    <div class="card-body">
-      <p class="login-box-msg">Member Login</p>
-
-      {% if messages %}
-        {% for message in messages %}
-          <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-            {{ message }}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-        {% endfor %}
-      {% endif %}
-      
-      <form method="POST" action="{% url 'login' %}">
-        {% csrf_token %}
-        {{ form.as_p }}
-        
-        <div class="row mb-3">
-          <div class="col-4">
-            <button type="submit" class="btn btn-primary btn-block">LOGIN</button>
-          </div>
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-sm-10 col-md-8 col-lg-5">
+      <div class="card shadow-sm border-primary">
+        <div class="card-header text-center bg-white border-0">
+          <img src="{% static 'img/carbib_logo.png' %}" alt="CARBIB Logo" class="img-fluid" style="max-width: 150px;">
         </div>
-      
-        <div class="text-center">
-          <p>Don't have an account? <a href="{% url 'register' %}">Register here</a></p>
-          <p><a href="{% url 'login' %}">Forgot your password?</a></p>
+
+        <div class="card-body">
+          <p class="text-center mb-4 fw-semibold">Member Login</p>
+
+          {% if messages %}
+            {% for message in messages %}
+              <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            {% endfor %}
+          {% endif %}
+
+          <form method="POST" action="{% url 'login' %}">
+            {% csrf_token %}
+
+            <div class="mb-3">
+              {{ form.username.label_tag }}
+              {{ form.username }}
+              {{ form.username.errors }}
+            </div>
+
+            <div class="mb-3">
+              {{ form.password.label_tag }}
+              {{ form.password }}
+              {{ form.password.errors }}
+            </div>
+
+            <div class="d-grid mb-3">
+              <button type="submit" class="btn btn-primary btn-block">LOGIN</button>
+            </div>
+
+            <div class="text-center">
+              <p class="mb-1">Don't have an account? <a href="{% url 'register' %}">Register here</a></p>
+              <p class="mb-0"><a href="{% url 'login' %}">Forgot your password?</a></p>
+            </div>
+          </form>
         </div>
-      </form>
-      
+      </div>
     </div>
   </div>
 </div>
+
+<style>
+  /* Make input fields full width and consistent */
+  input[type="text"],
+  input[type="password"] {
+      width: 100%;
+      padding: 0.5rem;
+      border-radius: 0.25rem;
+      border: 1px solid #ced4da;
+  }
+
+  @media (max-width: 576px) {
+      .card-body {
+          padding: 1rem;
+      }
+  }
+</style>
 {% endblock %}
