@@ -16,8 +16,12 @@ SECRET_KEY = config('SECRET_KEY', default='django-insecure-please-change-this')
 DEBUG = config('DEBUG', default=False, cast=bool)
 
 # 🔹 Hosts and CSRF
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='127.0.0.1,localhost,carbib.onrender.com').split(',')
-CSRF_TRUSTED_ORIGINS = ['https://carbib.onrender.com']
+ALLOWED_HOSTS = config(
+    'ALLOWED_HOSTS',
+    default='127.0.0.1,localhost,carbib.onrender.com'
+).split(',')
+
+CSRF_TRUSTED_ORIGINS = [f'https://{host}' for host in ALLOWED_HOSTS if host != '127.0.0.1' and host != 'localhost']
 
 # 🔹 Authentication Redirects
 LOGOUT_REDIRECT_URL = '/login/'
@@ -116,3 +120,6 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # 🔹 Default primary key field
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# 🔹 Render-friendly environment variables
+# Example: SECRET_KEY, DEBUG, ALLOWED_HOSTS
