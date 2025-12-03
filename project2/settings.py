@@ -5,105 +5,149 @@ Prepared for deployment on Render.
 
 from pathlib import Path
 import os
-from decouple import config  # pip install python-decouple
-import dj_database_url      # pip install dj-database-url
+from decouple import config     # pip install python-decouple
+import dj_database_url           # pip install dj-database-url
 
-# 🔹 BASE DIR
+# -------------------------------------------------------------
+# BASE DIRECTORY
+# -------------------------------------------------------------
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# 🔹 SECURITY
-SECRET_KEY = config('SECRET_KEY', default='django-insecure-please-change-this')
-DEBUG = config('DEBUG', default=False, cast=bool)
+# -------------------------------------------------------------
+# SECURITY
+# -------------------------------------------------------------
+SECRET_KEY = config("SECRET_KEY", default="django-insecure-change-this")
+DEBUG = config("DEBUG", default=False, cast=bool)
 
-# 🔹 Hosts and CSRF
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='127.0.0.1,localhost,carbib.onrender.com').split(',')
-CSRF_TRUSTED_ORIGINS = ['https://carbib.onrender.com']
+# -------------------------------------------------------------
+# HOSTS & CSRF
+# -------------------------------------------------------------
+RENDER_EXTERNAL_HOSTNAME = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
 
-# 🔹 Authentication Redirects
-LOGOUT_REDIRECT_URL = '/login/'
-LOGIN_REDIRECT_URL = '/myapp/dashboard/'
-LOGIN_URL = '/login/'
+ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
-# 🔹 Installed Apps
+# Your custom domain
+ALLOWED_HOSTS += [
+    "carbib.onrender.com",
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://carbib.onrender.com",
+    f"https://{RENDER_EXTERNAL_HOSTNAME}" if RENDER_EXTERNAL_HOSTNAME else "",
+]
+
+# Remove empty strings if RENDER_EXTERNAL_HOSTNAME is missing
+CSRF_TRUSTED_ORIGINS = [x for x in CSRF_TRUSTED_ORIGINS if x != ""]
+
+# -------------------------------------------------------------
+# AUTH REDIRECTS
+# -------------------------------------------------------------
+LOGIN_URL = "/login/"
+LOGOUT_REDIRECT_URL = "/login/"
+LOGIN_REDIRECT_URL = "/myapp/dashboard/"
+
+# -------------------------------------------------------------
+# INSTALLED APPS
+# -------------------------------------------------------------
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
 
     # Your app
-    'myapp',
+    "myapp",
 ]
 
-# 🔹 Middleware
+# -------------------------------------------------------------
+# MIDDLEWARE
+# -------------------------------------------------------------
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # serve static files in production
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "django.middleware.security.SecurityMiddleware",
+
+    # Whitenoise must come RIGHT AFTER SecurityMiddleware
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-# 🔹 URL Configuration
-ROOT_URLCONF = 'django3.urls'
+# -------------------------------------------------------------
+# URLS & WSGI
+# -------------------------------------------------------------
+ROOT_URLCONF = "django3.urls"
+WSGI_APPLICATION = "django3.wsgi.application"
 
-# 🔹 Templates
+# -------------------------------------------------------------
+# TEMPLATES
+# -------------------------------------------------------------
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [BASE_DIR / "templates"],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
             ],
         },
     },
 ]
 
-# 🔹 WSGI
-WSGI_APPLICATION = 'django3.wsgi.application'
-
-# 🔹 Database
+# -------------------------------------------------------------
+# DATABASE (Render PostgreSQL or SQLite fallback)
+# -------------------------------------------------------------
 DATABASES = {
-    'default': dj_database_url.config(
+    "default": dj_database_url.config(
         default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
-        conn_max_age=600
+        conn_max_age=600,
+        ssl_require=False,
     )
 }
 
-# 🔹 Password Validation
+# -------------------------------------------------------------
+# PASSWORD VALIDATION
+# -------------------------------------------------------------
 AUTH_PASSWORD_VALIDATORS = [
-    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',},
-    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',},
-    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',},
-    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',},
+    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
+    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
+    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
-# 🔹 Internationalization
-LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'Africa/Kampala'
+# -------------------------------------------------------------
+# INTERNATIONALIZATION
+# -------------------------------------------------------------
+LANGUAGE_CODE = "en-us"
+TIME_ZONE = "Africa/Kampala"
 USE_I18N = True
 USE_TZ = True
 
-# 🔹 Static and Media Files
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / 'static']
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+# -------------------------------------------------------------
+# STATIC & MEDIA
+# -------------------------------------------------------------
+STATIC_URL = "/static/"
+STATICFILES_DIRS = [BASE_DIR / "static"]
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
 
-# Whitenoise for static files compression
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# Whitenoise compressed static files
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
-# 🔹 Default primary key field
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+# -------------------------------------------------------------
+# DEFAULT PRIMARY KEY
+# -------------------------------------------------------------
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
